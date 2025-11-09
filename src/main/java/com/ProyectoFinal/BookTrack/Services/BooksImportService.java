@@ -26,21 +26,37 @@ public class BooksImportService {
                 row++;
                 if (line.trim().isEmpty()) continue;
                 try {
-                    String[] c = parseCsvLine(line); // title,author,cantidad_total,cantidad_disponible,fecha
+                    String[] c = parseCsvLine(line); // titulo,autor,cantidad_total,cantidad_disponible,fecha
                     String titulo = norm(c[0]);
                     String autor  = norm(c[1]);
-                    int total = parseInt(c[2], "cantidad_total");
-                    int disp  = parseInt(c[3], "cantidad_disponible");
-                    Date fecha = Date.valueOf(c[4].trim()); // YYYY-MM-DD
 
+                    // Validaciones mínimas por fila
+                    if (titulo.isEmpty()) { rep.addError(row, "titulo vacío"); continue; }
+                    if (autor.isEmpty()) { rep.addError(row, "autor vacío"); continue; }
+
+                    int total;
+                    try { total = parseInt(c[2], "cantidad_total"); }
+                    catch (IllegalArgumentException e){ rep.addError(row, e.getMessage()); continue; }
+
+                    int disp;
+                    try { disp = parseInt(c[3], "cantidad_disponible"); }
+                    catch (IllegalArgumentException e){ rep.addError(row, e.getMessage()); continue; }
+
+                    Date fecha;
+                    try { fecha = Date.valueOf(c[4].trim()); }
+                    catch (IllegalArgumentException e){ rep.addError(row, "fecha inválida, use YYYY-MM-DD"); continue; }
+
+                    // Detección de duplicados (case-insensitive)
                     if (libroRepo.existsByTituloIgnoreCaseAndAutorIgnoreCase(titulo, autor)) {
                         rep.addDuplicate();
                         continue;
                     }
 
+                    // Crear y guardar entidad
                     Libro b = new Libro();
                     b.setTitulo(titulo);
                     b.setAutor(autor);
+                    // Lombok generó setters con el nombre de las propiedades tal cual (ver entity)
                     b.setCantidad_total(total);
                     b.setCantidad_disponible(disp);
                     b.setFecha(fecha);
