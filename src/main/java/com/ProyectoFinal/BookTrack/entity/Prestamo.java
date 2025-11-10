@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,8 +18,8 @@ public class Prestamo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_prestamo;
 
-    private Date fechaPrestamo;
-    private Date fechaDevolucion;
+    private LocalDate fechaPrestamo;
+    private LocalDate fechaDevolucion;
     private Boolean devuelto;
 
     @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)
