@@ -17,8 +17,12 @@ public class Prestamo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_prestamo;
 
+    @Column(nullable = false, columnDefinition = "DATE")
     private Date fechaPrestamo;
+
+    @Column(nullable = false, columnDefinition = "DATE")
     private Date fechaDevolucion;
+
     private Boolean devuelto;
 
     @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)

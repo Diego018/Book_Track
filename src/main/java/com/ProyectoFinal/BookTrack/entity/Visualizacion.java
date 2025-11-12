@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -18,8 +19,8 @@ public class Visualizacion {
     @Column(name = "id_visualizacion")
     private Long idVisualizacion;
 
-    @Column(name = "fecha_visualizacion", columnDefinition = "DATE")
-    private Date fechaVisualizacion;
+    @Column(name = "fecha_visualizacion", columnDefinition = "DATETIME")
+    private LocalDateTime fechaVisualizacion;
 
     @ManyToOne(targetEntity = Libro.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_libro")

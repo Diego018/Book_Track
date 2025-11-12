@@ -20,10 +20,10 @@ public class Calificacion {
 
     private int puntaje;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String comentario;
 
-    @Column(name = "fecha_calificacion")
+    @Column(name = "fecha_calificacion", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime fechaCalificacion;
 
     @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)

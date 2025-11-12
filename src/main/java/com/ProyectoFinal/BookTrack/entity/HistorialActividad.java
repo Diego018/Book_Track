@@ -21,7 +21,7 @@ public class HistorialActividad {
 
     private String accion;
 
-    @Column(name = "fecha_hora", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_hora", nullable = false,columnDefinition = "DATETIME")
     private LocalDateTime fechaHora;
 
     @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)
