@@ -23,7 +23,7 @@ public class Usuario {
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String contraseña;
 
     @ManyToOne(targetEntity = Rol.class, fetch = FetchType.LAZY)
