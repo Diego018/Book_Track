@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext } from 'react'
 const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
-  // Usuarios de prueba (coinciden con data.sql), Usados para probar el sistema de prestamos y devueltas de libros
+  // Usuarios de prueba (coinciden con data.sql)
   const mockUsers = [
     { id_usuario: 1, nombre: 'Sebastian', email: 'sebas@example.com' },
     { id_usuario: 2, nombre: 'Carlos', email: 'carlos@example.com' },

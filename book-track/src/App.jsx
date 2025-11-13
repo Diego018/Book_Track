@@ -3,6 +3,10 @@ import './App.css'
 import { useUser } from './context/UserContext'
 import { prestarLibro } from './services/PrestamoService'
 import MisPrestamos from './components/MisPrestamos'
+import MisReservas from './components/MisReservas'
+import Header from './components/Header'
+import BookList from './components/BookList'
+import Footer from './components/Footer'
 
 function App() {
   const [books, setBooks] = useState([])
@@ -56,89 +60,36 @@ function App() {
     }
   }
 
-  // Vista de Libros
-  if (currentView === 'libros') {
-    return (
-      <div className="app">
-        <header>
-          <h1>BookTrack — Libros</h1>
-          
-          {/* Selector de usuario mock */}
-          <div className="user-selector">
-            <label>
-              Simular sesión:
-              <select 
-                value={currentUser?.id_usuario || ''} 
-                onChange={(e) => {
-                  const usuario = mockUsers.find(u => u.id_usuario === parseInt(e.target.value))
-                  if (usuario) loginUser(usuario)
-                }}
-              >
-                {mockUsers.map(user => (
-                  <option key={user.id_usuario} value={user.id_usuario}>
-                    {user.nombre} ({user.email})
-                  </option>
-                ))}
-              </select>
-            </label>
-            {currentUser && <span className="user-info">✓ Conectado como: {currentUser.nombre}</span>}
-            <button 
-              className="btn-mis-prestamos"
-              onClick={() => setCurrentView('misPrestamos')}
-            >
-              📚 Mis Préstamos
-            </button>
-          </div>
-        </header>
-
-        {loading && <p>Cargando libros...</p>}
-        {error && <p className="error">Error: {error}</p>}
-
-        {!loading && !error && (
-          <div className="books-list">
-            {books.length === 0 ? (
-              <p>No hay libros disponibles.</p>
-            ) : (
-              <ul>
-                {books.map((b) => (
-                  <li key={b.idLibro} className="book-item">
-                    <h3>{b.titulo}</h3>
-                    <p>Autor: {b.autor}</p>
-                    <p>Fecha: {new Date(b.fecha).toLocaleDateString()}</p>
-                    <p>Cantidad disponible: {b.cantidad_disponible}</p>
-                    {b.generoLibro && (
-                      <p>Género: {b.generoLibro.descLibro}</p>
-                    )}
-                    
-                    {/* Botón de préstamo */}
-                    <button
-                      className="btn-prestar"
-                      onClick={() => handlePrestar(b.idLibro)}
-                      disabled={prestamosLoading[b.idLibro] || b.cantidad_disponible === 0}
-                    >
-                      {prestamosLoading[b.idLibro] ? 'Prestando...' : 'Prestar'}
-                    </button>
-                    {prestamosError[b.idLibro] && (
-                      <p className="error-small">{prestamosError[b.idLibro]}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-
-        <footer>
-          <small>Frontend conectado a http://localhost:8080</small>
-        </footer>
-      </div>
-    )
-  }
-
-  // Vista de Mis Préstamos
   if (currentView === 'misPrestamos') {
     return <MisPrestamos onBackToLibros={() => setCurrentView('libros')} />
   }
+
+  if (currentView === 'reservas') {
+    return <MisReservas onBackToLibros={() => setCurrentView('libros')} />
+  }
+
+  return (
+    <div className="app">
+      <Header
+        currentUser={currentUser}
+        mockUsers={mockUsers}
+        loginUser={loginUser}
+        onShowMisPrestamos={() => setCurrentView('misPrestamos')}
+        onShowMisReservas={() => setCurrentView('reservas')}
+      />
+
+      <BookList
+        books={books}
+        loading={loading}
+        error={error}
+        prestamosLoading={prestamosLoading}
+        prestamosError={prestamosError}
+        onPrestar={handlePrestar}
+      />
+
+      <Footer />
+    </div>
+  )
 }
 
 export default App
