@@ -19,8 +19,11 @@ public class SecurityConfig {
                         // Endpoints públicos, consultas para todos
                         .requestMatchers("/api/libros", "/api/libros/**").permitAll()
 
-                        // Endpoints de administrador, solo CRUD
+                        // Endpoints de administrador - CRUD de libros
                         .requestMatchers("/api/admin/libros/**").hasRole("ADMIN")
+
+                        // Endpoints de administrador - Búsqueda eficiente
+                        .requestMatchers("/api/admin/busqueda/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
