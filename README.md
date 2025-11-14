@@ -204,35 +204,32 @@ Esta versión sirve como **implementación funcional para pruebas**, mientras se
 
 ## Autenticación basada en JWT (Recomendada)
 
-Este proyecto utiliza autenticación JWT para manejar la sesión del usuario sin necesidad de React Context.
+Este proyecto utiliza autenticación **JWT** para manejar la sesión del usuario sin necesidad de React Context.
 
-Cómo funciona
+### Cómo funciona
 
-El usuario inicia sesión y el backend genera un token JWT con:
+1. El usuario inicia sesión y el backend genera un **token JWT** con:
 
-sub: ID del usuario
+   * `sub`: ID del usuario
+   * `role`: Rol del usuario
+   * `exp`: expiración
+2. El token se almacena en `localStorage`.
+3. Todas las peticiones al backend incluyen:
 
-role: Rol del usuario
+   ```http
+   Authorization: Bearer <token>
+   ```
+4. El frontend obtiene el ID del usuario decodificando el token:
 
-exp: expiración
+   ```javascript
+   import jwtDecode from "jwt-decode";
+   const token = localStorage.getItem("token");
+   const { sub: userId } = jwtDecode(token);
+   ```
 
-El token se almacena en localStorage.
-
-Todas las peticiones al backend incluyen:
-
-Authorization: Bearer <token>
-
-El frontend obtiene el ID del usuario decodificando el token:
-
-import jwtDecode from "jwt-decode";
-const token = localStorage.getItem("token");
-const { sub: userId } = jwtDecode(token);
-Ventajas
+### Ventajas
 
 * Evita el uso de Context global.
-
 * Permite acceder al usuario desde cualquier componente sin prop‑drilling.
-
 * Sesión persistente incluso al recargar.
-
 * Escalable y estándar en aplicaciones reales.
